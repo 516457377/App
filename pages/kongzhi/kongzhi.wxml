@@ -1,0 +1,57 @@
+<!--pages/kongzhi/kongzhi.wxml-->
+<view id='top-view' style='margin-top:10%;'>
+  <view class='top-4' id='top1' bindtap='onClickUp' hover-class='ui-share-hover'>
+    <icon class='iconfont icon-close'></icon>
+    <view style='font-size:80%'>注销</view>
+  </view>
+  <view class='top-4' id='top2' bindtap='onClickUp' hover-class='ui-share-hover'>
+    <icon class='iconfont icon-home'></icon>
+    <view style='font-size:80%'>首页</view>
+  </view>
+  <view class='top-4' id='top3' bindtap='onClickUp' wx:if='{{!show}}' hover-class='ui-share-hover'>
+    <icon class='iconfont icon-menu'></icon>
+    <view style='font-size:80%'>菜单</view>
+  </view>
+  <view class='top-4' id='top_gun' bindtap='onClickUp' wx:else hover-class='ui-share-hover'>
+    <icon class='iconfont icon-gunlun'></icon>
+    <view style='font-size:80%'>{{show_lun ? '显示':'隐藏'}}</view>
+  </view>
+  <view class='top-4' id='top4' bindtap='onClickUp' hover-class='ui-share-hover'>
+    <icon class="iconfont:{{show ? 'icon-yaokong' : 'icon-touch'}}"></icon>
+    <view style='font-size:80%'>{{show?'遥控':'触摸'}}</view>
+  </view>
+
+</view>
+
+<view class='daohang-view' hidden='{{show}}'>
+  <view class='grid-3'></view>
+  <view class='grid-3' style='margin-bottom:50rpx' id='up' bindtap='onClickUp' hover-class='ui-share-hover'>
+    <icon class='iconfont icon-up' />
+  </view>
+  <view class='grid-3'></view>
+  <view class='grid-3' id='left' bindtap='onClickUp' hover-class='ui-share-hover'>
+    <icon class='iconfont icon-left' />
+  </view>
+  <view class='grid-3' id='enter' bindtap='onClickUp' hover-class='ui-share-hover'>
+    <icon class='iconfont icon-enter' />
+  </view>
+  <view class='grid-3' id='right' bindtap='onClickUp' hover-class='ui-share-hover'>
+    <icon class='iconfont icon-right' />
+  </view>
+  <view class='grid-3'></view>
+  <view class='grid-3' style='margin-top:40rpx' id='down' bindtap='onClickUp' hover-class='ui-share-hover'>
+    <icon class='iconfont icon-down' />
+  </view>
+  <view class='grid-3'></view>
+</view>
+<view>
+  <canvas class='daohang-view' hidden='{{!show}}' style='background-color:#ECECEC; position: relative;display: flex; box-sizing: border-box;' canvas-id="firstCanvas" disable-scroll="true" bindtouchstart="onTouchStart" bindtouchmove="onTouch" bindtouchend="onTouchEnd"
+    bindtouchcancel="onTouchEnd" bindlongtap='onLongClick'>
+    <icon class='iconfont icon-gunlun' hidden='{{show_lun}}' style='padding-top:28%;padding-left:35%;font-size:220rpx;'></icon>
+  </canvas>
+
+</view>
+
+<view style='text-align: center;margin-top:5%;margin-left:40rpx;margin-right:40rpx;'>
+  <button id='back' bindtap='onClickUp' class='backfont icon-back'></button>
+</view>

@@ -1,0 +1,48 @@
+/**app.wxss**/
+@font-face {
+  font-family: 'iconfont';  /* project id 838752 */
+  src: url('//at.alicdn.com/t/font_838752_dniz3eleahq.eot');
+  src: url('//at.alicdn.com/t/font_838752_dniz3eleahq.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_838752_dniz3eleahq.woff') format('woff'),
+  url('//at.alicdn.com/t/font_838752_dniz3eleahq.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_838752_dniz3eleahq.svg#iconfont') format('svg');
+}
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 200rpx 0;
+  box-sizing: borderaaaa-box;
+}
+.iconfont {
+  font-family:"iconfont" !important;
+  font-size:60rpx;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.backfont {
+  font-family:"iconfont" !important;
+  font-size:40rpx;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.icon-left:before{content: '\e613'}
+.icon-refresh:before{content: '\e653'}
+.icon-down:before{content: "\e62f"}
+.icon-right:before{content: "\e62e"}
+.icon-up:before{content: "\e62d"}
+.icon-erweima:before{content: "\e630"}
+.icon-search:before{content: "\e632"}
+.icon-close:before{content: "\e654"}
+.icon-home:before{content: "\e61a"}
+.icon-menu:before{content: "\e617"}
+.icon-touch:before{content: "\e702"}
+.icon-enter:before{content: "\e602"}
+.icon-back:before{content: "\e603"}
+.icon-yaokong:before{content: "\e622"}
+.icon-gunlun:before{content: "\e697"}
+/*《最后的译者》《沉默的音节》​​*/

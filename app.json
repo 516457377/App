@@ -1,0 +1,18 @@
+{
+  "pages": [
+    
+    "pages/start/start",
+    "pages/index/index",
+     
+    "pages/kongzhi/kongzhi",
+    "pages/logs/logs"
+    
+  ],
+  "window": {
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#eee",
+    "navigationBarTitleText": "智能吸顶",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#eeeeee"
+  }
+}

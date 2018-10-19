@@ -1,0 +1,24 @@
+<!--logs.wxml-->
+<view hidden='true' class="container log-list">
+  <block wx:for="{{logs}}" wx:for-item="log">
+    <text class="log-item">{{index + 1}}. {{log}}</text>
+  </block>
+</view>
+
+<!--画板界面-->
+
+<canvas class="draw_label" style='background-color:#ECECEC;' hidden='true' canvas-id="firstCanvas" disable-scroll="true" bindtouchstart="touchStart" bindtouchmove="touchMove" bindtouchend="touchEnd" bindtouchcancel="touchEnd">
+</canvas>
+<view style='height:300rpx;width:100%;background:#aa0000'>
+  <icon class='iconfont:icon-left'></icon>
+  <text>{{str}}</text>
+</view>
+
+<view style='height:60%;background:#ECECEC'>
+  <text>{{str2}}</text>
+  <progress show-info='true' percent='20' backgroundColor='#ffffff'></progress>
+</view>
+<view style='height:40%;width:100%;background:#008900;'>
+  <button>back</button>
+  <!-- 4 400 100 15% -->
+</view>
