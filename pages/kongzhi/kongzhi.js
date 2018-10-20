@@ -19,6 +19,7 @@ Page({
     show_lun: true,
     debug: true,
     longClick:false,
+    slider:11,
 
 
   },
@@ -63,6 +64,7 @@ Page({
    * 蓝牙连接成功
   */
   onConnectOK: function(res){
+    var that = this;
     console.log('蓝牙连接成功', res)
     wx.hideLoading()
     wx.setNavigationBarTitle({
@@ -84,6 +86,31 @@ Page({
         })
       }
 
+    })
+    wx.notifyBLECharacteristicValueChange({
+      deviceId: mac,
+      serviceId: that.data.UUID_SERVER,
+      characteristicId: that.data.UUID_READ,
+      state: true,
+      success: function(res) {
+        console.log('监听开启成功')
+        //请求音量
+        const sound = new Int8Array(3);
+        sound[0] = 121;
+        sound[1] = -121;
+        sound[2] = 124;
+        that.wirte(sound)
+
+        wx.onBLECharacteristicValueChange(function(res){
+          console.log('收到消息:',res);
+          var v = res.value;
+          var array = new Int8Array(v);
+          that.setData({
+            slider: array[0]
+          })
+          console.log(array)
+        })
+      },
     })
   },
   /**蓝牙连接失败*/
@@ -166,9 +193,12 @@ Page({
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function() {
+  // onShareAppMessage: function() {
 
-  },
+  // },
+  /**
+   * 长按
+  */
   onLongClick:function(res){
     var that = this
     console.log('长按')
@@ -201,24 +231,12 @@ Page({
     switch (event.currentTarget.id) {
       case 'top1':
         console.log('top1')
-        // const typedArray1 = new Int8Array(3);
-        // typedArray1[0] = 121;
-        // typedArray1[1] = -121;
-        // typedArray1[2] = 22;
-        // this.wirte(typedArray1)
-        wx.clearStorageSync()
-        wx.closeBLEConnection({
-          deviceId: mac,
-          success: function(res) {
-            console.log('断开链接')
-          },
-          complete: function(res) {
-            console.log('跳转到链接页面')
-            wx.redirectTo({
-              url: '../start/start',
-            })
-          }
-        })
+        const close = new Int8Array(3);
+        close[0] = 121;
+        close[1] = -121;
+        close[2] = 26;
+        this.wirte(close)
+        wx.vibrateShort({})
 
         break;
       case 'top2':
@@ -305,7 +323,22 @@ Page({
         this.wirte(back)
         wx.vibrateShort({})
         break;
-
+      case 'zhuxiao':
+        wx.vibrateShort({})
+        wx.clearStorageSync()
+        wx.closeBLEConnection({
+          deviceId: mac,
+          success: function (res) {
+            console.log('断开链接')
+          },
+          complete: function (res) {
+            console.log('跳转到链接页面')
+            wx.redirectTo({
+              url: '../start/start',
+            })
+          }
+        })
+      break;
     }
 
   },
@@ -412,6 +445,25 @@ Page({
       }, 200)
     }
 
+  }, changeSlider :function(res){
+    this.setData({
+      slider: res.detail.value
+    })
+  },
+  /**
+   * 音量改变
+   */
+  change:function(res){
+    this.setData({
+      slider: res.detail.value
+    })
+    console.log(res)
+    const sound = new Int8Array(3);
+    sound[0] = 123;
+    sound[1] = -123;
+    sound[2] = res.detail.value;
+    this.wirte(sound)
+    wx.vibrateShort({})
   },
 
 })
