@@ -11,15 +11,15 @@ Page({
    */
   data: {
     deviceID: '', //当前连接设备id(MAC)
-    UUID_SERVER: '0000fee0-0000-1000-8000-00805f9b34fb',
-    UUID_WRITE: '0000fee2-0000-1000-8000-00805f9b34fb',
-    UUID_READ: '0000fee1-0000-1000-8000-00805f9b34fb',
+    UUID_SERVER: '0000FEE0-0000-1000-8000-00805F9B34FB',
+    UUID_WRITE: '0000FEE2-0000-1000-8000-00805F9B34FB',
+    UUID_READ: '0000FEE1-0000-1000-8000-00805F9B34FB',
     mDevice: null,
     show: false,
     show_lun: true,
-    debug: true,
+    debug: false,
     longClick:false,
-    slider:11,
+    slider:0,
 
 
   },
@@ -38,7 +38,7 @@ Page({
     })
     wx.createBLEConnection({
       deviceId: mac,
-      timeout: 3000,
+      timeout: 3000, 
       success: function(res) {
         that.onConnectOK(res)
       },
@@ -87,6 +87,20 @@ Page({
       }
 
     })
+    wx.getBLEDeviceServices({
+      deviceId: mac,
+      success: function(res) {
+        console.log('获取到severuuid',res)
+        wx.getBLEDeviceCharacteristics({
+          deviceId: mac,
+          serviceId: that.data.UUID_SERVER,
+          success: function (res) {
+            console.log('特征码', res)
+          },
+        })
+      },
+    })
+    
     wx.notifyBLECharacteristicValueChange({
       deviceId: mac,
       serviceId: that.data.UUID_SERVER,
@@ -346,10 +360,11 @@ Page({
    * 写入数据事件
    */
   wirte: function(buff) {
+    var that = this;
     wx.writeBLECharacteristicValue({
       deviceId: mac,
-      serviceId: this.data.UUID_SERVER,
-      characteristicId: this.data.UUID_WRITE,
+      serviceId: that.data.UUID_SERVER,
+      characteristicId: that.data.UUID_WRITE,
       value: buff.buffer,
       success: function(res) {
         console.log('发送成功', res)

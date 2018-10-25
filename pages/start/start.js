@@ -14,9 +14,10 @@ Page({
     }],
     openBle: false,
     UUID_SERVER: '0000fee0-0000-1000-8000-00805f9b34fb',
-    debug: true,
+    debug: false,
     name: '',
-    mac: ''
+    mac: '',
+    ios: false
 
   },
 
@@ -24,9 +25,21 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    console.log()
     console.log(this.route, 'onLoad')
-    if(options.result){
+    that = this;
+    //检查设备型号
+    wx.getSystemInfo({
+      success: function(res) {
+        console.log('info', res)
+        if (res.system.indexOf('ios') || res.system.indexOf('iOS') || res.system.indexOf('Ios')) {
+          that.setData({
+            ios: true
+          })
+        }
+      },
+    })
+
+    if (options.result) {
       result = true;
     }
     var that = this;
@@ -65,6 +78,7 @@ Page({
    * 每次进入会调用
    */
   onShow: function() {
+
     this.setData({
       name: wx.getStorageSync('name'),
       mac: wx.getStorageSync('mac')
@@ -106,7 +120,6 @@ Page({
     })
     wx.hideLoading()
     wx.startBluetoothDevicesDiscovery({
-      services: [that.data.UUID_SERVER],
       allowDuplicatesKey: false,
       success: function(res) {
         console.log('打开扫描开始')
@@ -141,6 +154,10 @@ Page({
               console.log('所有设备', res)
               for (var i = 0; i < res.devices.length; i++) {
                 var ds = that.data.mList
+                if (res.devices[i].name.indexOf('t') == -1 &&
+                  res.devices[i].name.indexOf('BLE') == -1) { //过滤不符合蓝牙
+                  continue;
+                }
                 var temp = {
                   name: res.devices[i].name,
                   mac: res.devices[i].deviceId
@@ -216,11 +233,11 @@ Page({
    * 用户点击右上角分享
    */
   // onShareAppMessage: function() {
-    
+
   // },
   /**
    * 刷新
-  */
+   */
   onRefresh: function() {
     wx.startPullDownRefresh({})
   },
@@ -244,35 +261,40 @@ Page({
         console.log(res.result, '扫码成功')
         var url = res.result;
         var name, mac;
-        if(that.data.debug){
+        if (that.data.debug) {
 
         }
         // url = 'http://www.xxx.com/downapp/xxx&SPP_Ble&08:7C:BE:96:27:04'
         //http://www.xxx.com/downapp/xxx&SPP_Ble&08:7C:BE:96:27:04
-        
+
         name = url.substring(url.indexOf('&') + 1, url.lastIndexOf('&'))
         mac = url.substring(url.lastIndexOf('&') + 1, url.length)
-        if (mac.length > 1 && name.length > 1){
-          console.log('扫码跳转:',name,mac)
-          wx.redirectTo({
-            url: '../kongzhi/kongzhi?mac=' + mac + '&name=' + name,
-            complete: function () {
-              console.log('start结束')
-            }
-          })
-        }else{
+        if (mac.length > 1 && name.length > 1) {
+          if (that.data.ios) {
+            //如果是ios则通过名字连接，先扫描设备识别名字连接
+            that.connectForName(name)
+          } else {
+            console.log('扫码跳转:', name, mac)
+            wx.redirectTo({
+              url: '../kongzhi/kongzhi?mac=' + mac + '&name=' + name,
+              complete: function() {
+                console.log('start结束')
+              }
+            })
+          }
+        } else {
           console.log('不跳转')
-         
+
           wx.showToast({
             title: '二维码识别失败\n请扫描正确二维码',
-            duration:3000,
-            icon:'none'
+            duration: 3000,
+            icon: 'none'
             // image:'../../src/images/warning.png'
           })
           return;
         }
 
-        
+
 
         // that.setData({
         //   url:res.result
@@ -281,6 +303,22 @@ Page({
       fail: function(res) {
         console.log(res.result, '扫码失败')
       }
+    })
+  },
+  connectForName:function(name){
+    wx.getBluetoothDevices({
+      success: function(res) {
+        for(var i =0;i<res.devices.length;i++){
+          if (res.devices[i].name == name || res.devices[i].localName == name){
+            wx.redirectTo({
+              url: '../kongzhi/kongzhi?mac=' + res.devices[i].deviceId + '&name=' + name,
+              complete: function () {
+                console.log('start结束')
+              }
+            })
+          }
+        }
+      },
     })
   }
 })
