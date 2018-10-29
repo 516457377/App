@@ -3,10 +3,8 @@
     
     "pages/start/start",
     "pages/index/index",
-     
     "pages/kongzhi/kongzhi",
     "pages/logs/logs"
-    
   ],
   "window": {
     "backgroundTextStyle": "dark",

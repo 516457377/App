@@ -15,4 +15,75 @@ page{
     height:750rpx;
     display: flex;
     box-sizing: border-box;
+    
+}.demo{
+  flex: content;
+  height:60%;
+  background:#ECECEC;
+}
+
+
+
+
+
+
+
+
+ /**背景*/
+.button-group {
+  width:  100%;
+  height: 500rpx;
+  background-color: #F0F0F0;
+  display:flex;
+  align-items:center;/*垂直居中*/
+  justify-content: center;/*水平居中*/
+}
+/**遥控整体+间隙ok颜色*/
+.outter-circle {
+  position: relative;
+  width: 480rpx;
+  height: 480rpx;
+  background-color: rgba(0, 0, 0, 0.74);
+  border-radius: 100%;
+  overflow: hidden;
+  transform-origin: center;
+  transform: rotate(45deg);  
+}
+/**上下左右*/
+.inner-parts {
+  float: left;
+  width: 240rpx;
+  height: 240rpx;
+  line-height: 240rpx;
+  text-align: center;
+}
+.silver {
+  background-color:#EDEDED;
+}
+.gold {
+  background-color: #EDEDED;
+}
+.blue {
+  background-color: #EDEDED;
+}
+.brown {
+  background-color: #EDEDED;
+}
+/**ok圆*/
+.inner-circle {
+  position: absolute;
+  margin-top: 140rpx;
+  margin-left: 140rpx;
+  width: 200rpx;
+  height: 200rpx;
+  line-height: 200rpx;
+  text-align: center;
+  border-radius: 100%;
+  background-color: #E4E4E4;
+  /* #E4E4E4 */
+}
+/**字体旋转45°*/
+.rotate {
+  display: inline-block;
+  transform: rotate(-45deg);
 }

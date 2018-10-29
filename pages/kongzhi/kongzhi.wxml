@@ -1,5 +1,5 @@
 <!--pages/kongzhi/kongzhi.wxml-->
-<view id='top-view' style='margin-top:10%' >
+<view id='top-view' style='margin-top:10%'>
   <view class='top-4' id='top1' bindtap='onClickUp' hover-class='ui-share-hover'>
     <icon class='iconfont icon-close'></icon>
     <view style='font-size:80%'>关屏</view>
@@ -40,7 +40,7 @@
 
 
 <view class='daohang-view' hidden='{{show}}'>
-  <view class='grid-3'></view>
+  <!-- <view class='grid-3'></view>
   <view class='grid-3' style='margin-bottom:50rpx' id='up' bindtap='onClickUp' hover-class='ui-share-hover'>
     <icon class='iconfont icon-up' />
   </view>
@@ -58,7 +58,27 @@
   <view class='grid-3' style='margin-top:40rpx' id='down' bindtap='onClickUp' hover-class='ui-share-hover'>
     <icon class='iconfont icon-down' />
   </view>
-  <view class='grid-3'></view>
+  <view class='grid-3'></view> -->
+  <view class="button-group">
+    <view class="outter-circle">
+      <view class="inner-parts brown" bindtap="button" data-type="volAdd">
+        <text class="nvfont:icon-up"></text>
+      </view>
+      <view class="inner-parts silver" bindtap="button" data-type="chaAdd">
+        <text class="nvfont:icon-right"></text>
+      </view>
+      <view class="inner-parts blue" bindtap="button" data-type="chaDes">
+        <text class="nvfont:icon-left"></text>
+      </view>
+      <view class="inner-parts gold" bindtap="button" data-type="volDes">
+        <text class="nvfont:icon-down"></text>
+      </view>
+
+      <view class="inner-circle" bindtap="button" data-type="ok">
+        <text class="enterfont:icon-enter" style='color : #F2F2F2'></text>
+      </view>
+    </view>
+  </view>
 </view>
 <view>
   <canvas class='daohang-view' hidden='{{!show}}' style='background-color:#ECECEC; position: relative;display: flex; box-sizing: border-box;' canvas-id="firstCanvas" disable-scroll="true" bindtouchstart="onTouchStart" bindtouchmove="onTouch" bindtouchend="onTouchEnd"

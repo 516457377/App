@@ -9,16 +9,42 @@
 
 <canvas class="draw_label" style='background-color:#ECECEC;' hidden='true' canvas-id="firstCanvas" disable-scroll="true" bindtouchstart="touchStart" bindtouchmove="touchMove" bindtouchend="touchEnd" bindtouchcancel="touchEnd">
 </canvas>
-<view style='height:300rpx;width:100%;background:#aa0000'>
-  <icon class='iconfont:icon-left'></icon>
+
+
+<view style='height:300rpx;width:100%;background:#f2f2f2;'>
+  <icon class='iconfont:icon-colour' style='color:red;'></icon>
   <text>{{str}}</text>
+  <image src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/PjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+PHN2ZyB0PSIxNTQwODA0Mzg1OTU2IiBjbGFzcz0iaWNvbiIgc3R5bGU9IiIgdmlld0JveD0iMCAwIDEwMjQgMTAyNCIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHAtaWQ9IjE2NjciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iNDgiIGhlaWdodD0iNDgiPjxkZWZzPjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+PC9zdHlsZT48L2RlZnM+PHBhdGggZD0iTTk1NS40ODggMjY1LjEyYzM5LjYxNiA3LjI4IDE3LjIxNiAxNTIuMzM2LTUwLjAxNiAzMjQuMDMyLTY3LjIgMTcxLjY2NC0xNTMuODA4IDMwNC45OTItMTkzLjQyNCAyOTcuNjk2LTM5LjYxNi03LjI0OC0xNy4yMTYtMTUyLjMzNiA1MC0zMjQgNjcuMjE2LTE3MS42OTYgMTUzLjgyNC0zMDQuOTkyIDE5My40NC0yOTcuNzI4eiIgZmlsbD0iIzY4QzM0QyIgcC1pZD0iMTY2OCI+PC9wYXRoPjxwYXRoIGQ9Ik02NTguNDggMjY1LjEyYzM5LjYxNiA3LjI4IDE3LjIxNiAxNTIuMzM2LTUwIDMyNC4wMzItNjcuMjE2IDE3MS42NjQtMTUzLjgyNCAzMDQuOTkyLTE5My40NTYgMjk3LjY5Ni0zOS42LTcuMjQ4LTE3LjIzMi0xNTIuMzM2IDUwLTMyNCA2Ny4yMzItMTcxLjY5NiAxNTMuODQtMzA0Ljk5MiAxOTMuNDU2LTI5Ny43Mjh6IiBmaWxsPSIjREI3RDQ0IiBwLWlkPSIxNjY5Ij48L3BhdGg+PHBhdGggZD0iTTMxMS45NTIgMjY1LjEyYzM5LjYxNiA3LjI4IDE3LjIzMiAxNTIuMzM2LTUwIDMyNC4wMzItNjcuMjE2IDE3MS42OC0xNTMuODI0IDMwNC45OTItMTkzLjQ0IDI5Ny43MTItMzkuNjE2LTcuMjQ4LTE3LjIzMi0xNTIuMzM2IDUwLTMyNCA2Ny4yMTYtMTcxLjcxMiAxNTMuODI0LTMwNS4wMDggMTkzLjQ0LTI5Ny43NDR6IiBmaWxsPSIjRThCQTZGIiBwLWlkPSIxNjcwIj48L3BhdGg+PC9zdmc+" style='width:150rpx;height:150rpx' />
+  <text>#123</text>
 </view>
 
-<view style='height:60%;background:#ECECEC'>
-  <text>{{str2}}</text>
-  <progress show-info='true' percent='20' backgroundColor='#ffffff'></progress>
+<!-- 遥控-->
+<view style='' class='demo'>
+<view class="button-group">
+  <view class="outter-circle">
+    <view class="inner-parts brown" bindtap="button" data-type="volAdd">
+      <text class="nvfont:icon-up"></text>
+    </view>
+    <view class="inner-parts silver" bindtap="button" data-type="chaAdd">
+      <text class="nvfont:icon-right"></text>
+    </view>
+    <view class="inner-parts blue" bindtap="button" data-type="chaDes">
+      <text class="nvfont:icon-left"></text>
+    </view>
+    <view class="inner-parts gold" bindtap="button" data-type="volDes">
+      <text class="nvfont:icon-down"></text>
+    </view>
+
+    <view class="inner-circle" bindtap="button" data-type="ok">
+      <text class="enterfont:icon-enter" style='color : #F2F2F2'></text>
+    </view>
+  </view>
 </view>
-<view style='height:40%;width:100%;background:#008900;'>
+  
+</view>
+
+
+<view style='height:40%;width:100%;background:#007777;'>
   <button>back</button>
   <!-- 4 400 100 15% -->
 </view>

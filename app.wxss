@@ -1,11 +1,11 @@
 /**app.wxss**/
 @font-face {
   font-family: 'iconfont';  /* project id 838752 */
-  src: url('//at.alicdn.com/t/font_838752_h03k2to1dz7.eot');
-  src: url('//at.alicdn.com/t/font_838752_h03k2to1dz7.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_838752_h03k2to1dz7.woff') format('woff'),
-  url('//at.alicdn.com/t/font_838752_h03k2to1dz7.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_838752_h03k2to1dz7.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_838752_xkti659l3v.eot');
+  src: url('//at.alicdn.com/t/font_838752_xkti659l3v.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_838752_xkti659l3v.woff') format('woff'),
+  url('//at.alicdn.com/t/font_838752_xkti659l3v.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_838752_xkti659l3v.svg#iconfont') format('svg');
 }
 .container {
   height: 100%;
@@ -28,22 +28,42 @@
   font-size:40rpx;
   font-style:normal;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  -moz-osx-font-smoothing: grayscale; 
 }
-.icon-left:before{content: '\e613'}
+.nvfont{
+ font-family:"iconfont" !important;
+  font-size:40rpx;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  transform: rotate(-45deg); 
+}
+.enterfont{
+  font-family:"iconfont" !important;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size:170rpx;
+  display: inline-block;
+  transform: rotate(-45deg);
+  
+}
+.icon-left:before{content: '\e722'}
 .icon-refresh:before{content: '\e653'}
-.icon-down:before{content: "\e62f"}
-.icon-right:before{content: "\e62e"}
-.icon-up:before{content: "\e62d"}
+.icon-down:before{content: "\e618"}
+.icon-right:before{content: "\e721"}
+.icon-up:before{content: "\e720"}
 .icon-erweima:before{content: "\e630"}
 .icon-search:before{content: "\e632"}
 .icon-close:before{content: "\e654"}
 .icon-home:before{content: "\e61a"}
 .icon-menu:before{content: "\e617"}
 .icon-touch:before{content: "\e702"}
-.icon-enter:before{content: "\e602"}
+.icon-enter:before{content: "\e723"}
 .icon-back:before{content: "\e603"}
 .icon-yaokong:before{content: "\e622"}
 .icon-gunlun:before{content: "\e697"}
 .icon-zhuxiao:before{content: "\e63a"}
+.icon-colour:before{content:"\e608"}
 /*《最后的译者》《沉默的音节》​​*/

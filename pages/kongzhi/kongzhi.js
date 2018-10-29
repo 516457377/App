@@ -21,7 +21,6 @@ Page({
     longClick:false,
     slider:0,
 
-
   },
 
   /**
@@ -355,6 +354,58 @@ Page({
       break;
     }
 
+  },
+  button: function (e) {
+    var buttonType = e.currentTarget.dataset.type
+    console.log(buttonType)
+    switch (buttonType) {
+      case 'chaAdd':
+        console.log('right')
+        const right = new Int8Array(3);
+        right[0] = 121;
+        right[1] = -121;
+        right[2] = 22;
+        this.wirte(right)
+        wx.vibrateShort({})
+        break
+      case 'chaDes':
+        console.log('left')
+        const left = new Int8Array(3);
+        left[0] = 121;
+        left[1] = -121;
+        left[2] = 21;
+        this.wirte(left)
+        wx.vibrateShort({})
+        break
+      case 'volAdd':
+        console.log('up')
+        const up = new Int8Array(3);
+        up[0] = 121;
+        up[1] = -121;
+        up[2] = 19;
+        this.wirte(up)
+        wx.vibrateShort({})     
+        break
+      case 'volDes':
+        console.log('down')
+        const down = new Int8Array(3);
+        down[0] = 121;
+        down[1] = -121;
+        down[2] = 20;
+        this.wirte(down)
+        wx.vibrateShort({})      
+        break
+      default:
+        console.log('enter')
+        const enter = new Int8Array(3);
+        enter[0] = 121;
+        enter[1] = -121;
+        enter[2] = 23;
+        this.wirte(enter)
+        wx.vibrateShort({})
+        //5.1
+        break;
+    }
   },
   /**
    * 写入数据事件
