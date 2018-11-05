@@ -27,6 +27,7 @@ Page({
   onLoad: function(options) {
     console.log(this.route, 'onLoad')
     that = this;
+    
     //检查设备型号
     wx.getSystemInfo({
       success: function(res) {
@@ -154,12 +155,12 @@ Page({
               console.log('所有设备', res)
               for (var i = 0; i < res.devices.length; i++) {
                 var ds = that.data.mList
-                if (res.devices[i].name.indexOf('t') == -1 &&
-                  res.devices[i].name.indexOf('BLE') == -1) { //过滤不符合蓝牙
+                if (res.devices[i].localName.indexOf('t') == -1 &&
+                  res.devices[i].localName.indexOf('BLE') == -1) { //过滤不符合蓝牙
                   continue;
                 }
                 var temp = {
-                  name: res.devices[i].name,
+                  name: res.devices[i].localName,
                   mac: res.devices[i].deviceId
                 }
                 ds.push(temp)
