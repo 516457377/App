@@ -4,8 +4,8 @@ App({
     // 展示本地存储能力
     var logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
-    wx.setStorageSync('logs', logs)
-
+    wx.setStorageSync('logs', logs);
+    this.globalData.sysinfo = wx.getSystemInfoSync()
     // 登录
     wx.login({
       success: res => {
@@ -36,5 +36,11 @@ App({
   globalData: {
     userInfo: null,
     name:''
+  },
+  getVersion: function () { //获取微信版本号
+    return this.globalData.sysinfo["version"]
+  }, 
+  getPlatform: function () { //获取客户端平台
+    return this.globalData.sysinfo["platform"]
   }
 })

@@ -1,8 +1,8 @@
 <!--pages/start/start.wxml-->
 
-<button bindtap='onClick' type='primary'>扫码连接</button>
+<button bindtap='onClick' type='primary' disabled='{{!openBle}}'>扫码连接</button>
 
-<view style='width: 100%;border-bottom: 1px solid #eee;margin-top: 5px;padding-bottom: 5px;padding-left: 20px;' wx:for="{{mList}}" bindtap='onItemClick' wx:key='*this' data-name='{{item.name}}' data-mac='{{item.mac}}'>
+<view style='width: 100%;border-bottom: 1px solid #eee;margin-top: 5px;padding-bottom: 5px;padding-left: 20px;' wx:for="{{mList}}" bindtap='onItemClick' wx:key='*this' data-name='{{item.name}}' data-mac='{{item.mac}}' disabled='{{!openBle}}'>
   <view >{{item.name}}</view>
   <view >{{item.mac}}</view>
 </view>

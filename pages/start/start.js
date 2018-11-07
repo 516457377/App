@@ -17,7 +17,7 @@ Page({
     debug: false,
     name: '',
     mac: '',
-    ios: false
+    // ios: false
 
   },
 
@@ -25,20 +25,41 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    console.log(this.route, 'onLoad')
+    console.log(this.route, 'onLoad');
     that = this;
-    
     //检查设备型号
     wx.getSystemInfo({
       success: function(res) {
         console.log('info', res)
-        if (res.system.indexOf('ios') || res.system.indexOf('iOS') || res.system.indexOf('Ios')) {
-          that.setData({
-            ios: true
-          })
-        }
+        console.log('版本',app.getVersion())
+        // if (res.system.indexOf('ios') || res.system.indexOf('iOS') || res.system.indexOf('Ios')) {
+        //   that.setData({
+        //     ios: true
+        //   })
+        // }
       },
     })
+    //版本判断
+    if (app.getPlatform() == 'android' && this.versionCompare('6.5.7', app.getVersion())) {
+      wx.showModal({
+        title: '提示',
+        content: '当前微信版本过低，请更新至最新版本',
+        showCancel: false,
+        success:function(res){
+          if (res.confirm){//确认
+            
+          }
+        }
+      })
+      return;
+    } else if (app.getPlatform() == 'ios' && this.versionCompare('6.5.6', app.getVersion())) {
+      wx.showModal({
+        title: '提示',
+        content: '当前微信版本过低，请更新至最新版本',
+        showCancel: false
+      })
+      return;
+    }
 
     if (options.result) {
       result = true;
@@ -123,20 +144,20 @@ Page({
     wx.startBluetoothDevicesDiscovery({
       allowDuplicatesKey: false,
       success: function(res) {
-        console.log('打开扫描开始')
+        console.log('打开扫描开始:', res)
 
-        // wx.onBluetoothDeviceFound(function(res) {
-        //   console.log('发现设备', res)
-        //   var ds = that.data.mList
-        //   var temp = {
-        //     name: res.devices[0].name,
-        //     mac: res.devices[0].deviceId
-        //   }
-        //   ds.push(temp)
-        //   that.setData({
-        //     mList: ds
-        //   })
-        // })
+        wx.onBluetoothDeviceFound(function(res) {
+          console.log('发现设备', res)
+          // var ds = that.data.mList
+          // var temp = {
+          //   name: res.devices[0].name,
+          //   mac: res.devices[0].deviceId
+          // }
+          // ds.push(temp)
+          // that.setData({
+          //   mList: ds
+          // })
+        })
       },
       fail: function(res) {
         console.log('打开扫描设备失败', res)
@@ -267,22 +288,12 @@ Page({
         }
         // url = 'http://www.xxx.com/downapp/xxx&SPP_Ble&08:7C:BE:96:27:04'
         //http://www.xxx.com/downapp/xxx&SPP_Ble&08:7C:BE:96:27:04
+        // name = url.substring(url.indexOf('&') + 1, url.lastIndexOf('&'))
+        // mac = url.substring(url.lastIndexOf('&') + 1, url.length)
 
-        name = url.substring(url.indexOf('&') + 1, url.lastIndexOf('&'))
-        mac = url.substring(url.lastIndexOf('&') + 1, url.length)
-        if (mac.length > 1 && name.length > 1) {
-          if (that.data.ios) {
-            //如果是ios则通过名字连接，先扫描设备识别名字连接
-            that.connectForName(name)
-          } else {
-            console.log('扫码跳转:', name, mac)
-            wx.redirectTo({
-              url: '../kongzhi/kongzhi?mac=' + mac + '&name=' + name,
-              complete: function() {
-                console.log('start结束')
-              }
-            })
-          }
+        if (url.indexOf('##') != -1) { //识别码双#
+          name = url.substring(url.indexOf('##') + 2);
+          that.connectForName(name)
         } else {
           console.log('不跳转')
 
@@ -296,6 +307,32 @@ Page({
         }
 
 
+        // if (mac.length > 1 && name.length > 1) {
+        //   if (that.data.ios) {
+        //     //如果是ios则通过名字连接，先扫描设备识别名字连接
+        //     that.connectForName(name)
+        //   } else {
+        //     console.log('扫码跳转:', name, mac)
+        //     wx.redirectTo({
+        //       url: '../kongzhi/kongzhi?mac=' + mac + '&name=' + name,
+        //       complete: function() {
+        //         console.log('start结束')
+        //       }
+        //     })
+        //   }
+        // } else {
+        //   console.log('不跳转')
+
+        //   wx.showToast({
+        //     title: '二维码识别失败\n请扫描正确二维码',
+        //     duration: 3000,
+        //     icon: 'none'
+        //     // image:'../../src/images/warning.png'
+        //   })
+        //   return;
+        // }
+
+
 
         // that.setData({
         //   url:res.result
@@ -303,23 +340,56 @@ Page({
       },
       fail: function(res) {
         console.log(res.result, '扫码失败')
+        wx.showToast({
+          title: '二维码识别失败\n请扫描正确二维码',
+          duration: 3000,
+          icon: 'none'
+          // image:'../../src/images/warning.png'
+        })
       }
     })
   },
-  connectForName:function(name){
+  connectForName: function(name) {
     wx.getBluetoothDevices({
       success: function(res) {
-        for(var i =0;i<res.devices.length;i++){
-          if (res.devices[i].name == name || res.devices[i].localName == name){
+
+        for (var i = 0; i < res.devices.length; i++) {
+
+          if (res.devices[i].name.indexOf(name) > -1 || res.devices[i].localName.indexOf(name) > -1) {
             wx.redirectTo({
-              url: '../kongzhi/kongzhi?mac=' + res.devices[i].deviceId + '&name=' + name,
-              complete: function () {
+              url: '../kongzhi/kongzhi?mac=' + res.devices[i].deviceId + '&name=' + res.devices[i].localName,
+              complete: function() {
                 console.log('start结束')
+                return;
               }
             })
           }
         }
+        console.log("没有找到合适的连接设备");
+        wx.showToast({
+          title: '二维码连接失败\n请确认设备状态后重试',
+          duration: 3000,
+          icon: 'none'
+          // image:'../../src/images/warning.png'
+        })
       },
     })
+  },
+  /**版本比较*/
+  versionCompare: function(ver1, ver2) {
+    var version1pre = parseFloat(ver1)
+    var version2pre = parseFloat(ver2)
+    var version1next = parseInt(ver1.replace(version1pre + ".", ""))
+    var version2next = parseInt(ver2.replace(version2pre + ".", ""))
+    if (version1pre > version2pre)
+      return true
+    else if (version1pre < version2pre)
+      return false
+    else {
+      if (version1next > version2next)
+        return true
+      else
+        return false
+    }
   }
 })
