@@ -75,7 +75,6 @@ Page({
       },
       fail: function(res) {
         console.log('蓝牙初始化失败')
-
         that.setData({
           openBle: false
         })
@@ -92,15 +91,15 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function() {
-
   },
+
 
   /**
    * 生命周期函数--监听页面显示
    * 每次进入会调用
    */
   onShow: function() {
-
+    
     this.setData({
       name: wx.getStorageSync('name'),
       mac: wx.getStorageSync('mac')

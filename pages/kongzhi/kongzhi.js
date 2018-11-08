@@ -20,6 +20,7 @@ Page({
     debug: false,
     longClick: false,
     connect: false,
+    NumOut:false,
     slider: 0,
 
   },
@@ -107,6 +108,13 @@ Page({
       },
       fail: function(res) {
         console.log('serverid获取失败', res);
+        if(that.data.NumOut){
+          that.onConnectNO(res)
+          return;
+        }
+        that.setData({
+          NumOut:true
+        })
         wx.closeBluetoothAdapter({
           success: function(res) {
             console.log('适配器重启');
@@ -115,7 +123,7 @@ Page({
                 console.log('重启后重连')
                 wx.createBLEConnection({
                   deviceId: mac,
-                  timeout: 1000,
+                  timeout: 3000,
                   success: function(res) {
                     console.log('重连成功')
                     that.onConnectOK(res);
@@ -422,12 +430,10 @@ Page({
           deviceId: mac,
           success: function(res) {
             console.log('断开链接')
+            that.disConnect();
           },
           complete: function(res) {
             console.log('点击跳转到链接页面')
-            wx.reLaunch({
-              url: '..kongzhi/start',
-            })
             wx.reLaunch({
               url: '../start/start',
             })
@@ -613,6 +619,16 @@ Page({
     sound[2] = res.detail.value;
     this.wirte(sound)
     wx.vibrateShort({})
+  },
+  disConnect: function () {
+    wx.createBLEConnection({
+      deviceId: '00:00:00:00:00',
+      success: function (res) {
+        console.log("这也能连接成功？");
+      }, fail: function (res) {
+        console.log("尝试连接失败");
+      }
+    })
   },
 
 })
