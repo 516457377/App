@@ -113,9 +113,11 @@ Page({
         url: '../kongzhi/kongzhi?mac=' + that.data.mac + '&name=' + that.data.name,
         complete: function() {
           console.log('start结束')
+          wx.stopPullDownRefresh();
         }
       })
     }
+
     if (that.data.openBle) {
       wx.startPullDownRefresh({})
     } else {
@@ -140,80 +142,92 @@ Page({
     that.setData({
       mList: [{}]
     })
-    wx.hideLoading()
-    wx.startBluetoothDevicesDiscovery({
-      allowDuplicatesKey: false,
-      success: function(res) {
-        console.log('打开扫描开始:', res)
 
-        wx.onBluetoothDeviceFound(function(res) {
-          console.log('发现设备', res)
-          // var ds = that.data.mList
-          // var temp = {
-          //   name: res.devices[0].name,
-          //   mac: res.devices[0].deviceId
-          // }
-          // ds.push(temp)
-          // that.setData({
-          //   mList: ds
-          // })
-        })
+    wx.closeBluetoothAdapter({
+      success: function(res) {
       },
-      fail: function(res) {
-        console.log('打开扫描设备失败', res)
-      }
     })
-    //3秒后关闭扫描
-    clearTimeout(num) //只需要一个定时器存在
-    num = setTimeout(function() {
-      wx.stopBluetoothDevicesDiscovery({
-        success: function(res) {
-          console.log('关闭扫描')
-          wx.stopPullDownRefresh(); //停止当前页面的下拉刷新
-          wx.hideNavigationBarLoading(); //加载动画结束
-          wx.getBluetoothDevices({
-            success: function(res) {
-              console.log('所有设备', res)
-              for (var i = 0; i < res.devices.length; i++) {
-                var ds = that.data.mList
-                if (res.devices[i].localName.indexOf('t') == -1 &&
-                  res.devices[i].localName.indexOf('BLE') == -1) { //过滤不符合蓝牙
-                  continue;
+    wx.openBluetoothAdapter({
+      success: function (res) {
+        console.log("重启设备");
+        wx.hideLoading()
+        wx.startBluetoothDevicesDiscovery({
+          allowDuplicatesKey: false,
+          success: function (res) {
+            console.log('打开扫描开始:', res)
+
+            wx.onBluetoothDeviceFound(function (res) {
+              console.log('发现设备', res)
+              // var ds = that.data.mList
+              // var temp = {
+              //   name: res.devices[0].name,
+              //   mac: res.devices[0].deviceId
+              // }
+              // ds.push(temp)
+              // that.setData({
+              //   mList: ds
+              // })
+            })
+          },
+          fail: function (res) {
+            console.log('打开扫描设备失败', res)
+          }
+        })
+        //3秒后关闭扫描
+        clearTimeout(num) //只需要一个定时器存在
+        num = setTimeout(function () {
+          wx.stopBluetoothDevicesDiscovery({
+            success: function (res) {
+              console.log('关闭扫描')
+              wx.stopPullDownRefresh(); //停止当前页面的下拉刷新
+              wx.hideNavigationBarLoading(); //加载动画结束
+              wx.getBluetoothDevices({
+                success: function (res) {
+                  console.log('所有设备', res)
+                  for (var i = 0; i < res.devices.length; i++) {
+                    var ds = that.data.mList
+                    if (res.devices[i].localName.indexOf('t') == -1 &&
+                      res.devices[i].localName.indexOf('BLE') == -1) { //过滤不符合蓝牙
+                      continue;
+                    }
+                    var temp = {
+                      name: res.devices[i].localName,
+                      mac: res.devices[i].deviceId
+                    }
+                    ds.push(temp)
+                    that.setData({
+                      mList: ds
+                    })
+                  }
+                },
+                fail: function (res) {
+                  that.setData({
+                    mList: [{
+                      name: '未搜索到设备，请刷新',
+                      mac: ''
+                    }]
+                  })
+                },
+                complete: function (res) {
+                  console.log('length:', that.data.mList)
+                  if (that.data.mList.length <= 0) {
+                    that.setData({
+                      mList: [{
+                        name: '未搜索到设备，请刷新',
+                        mac: ''
+                      }]
+                    })
+                  }
+
                 }
-                var temp = {
-                  name: res.devices[i].localName,
-                  mac: res.devices[i].deviceId
-                }
-                ds.push(temp)
-                that.setData({
-                  mList: ds
-                })
-              }
-            },
-            fail: function(res) {
-              that.setData({
-                mList: [{
-                  name: '未搜索到设备，请刷新',
-                  mac: ''
-                }]
               })
             },
-            complete: function(res) {
-              console.log('length:', that.data.mList)
-              if (that.data.mList.length <= 0) {
-                that.setData({
-                  mList: [{
-                    name: '未搜索到设备，请刷新',
-                    mac: ''
-                  }]
-                })
-              }
-
-            }
           })
-        },
-      })
-    }, 2500)
+        }, 2500)
+      },
+    })
+
+    
     // clearTimeout(num)
 
   },

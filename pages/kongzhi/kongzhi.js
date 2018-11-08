@@ -18,8 +18,9 @@ Page({
     show: false,
     show_lun: true,
     debug: false,
-    longClick:false,
-    slider:0,
+    longClick: false,
+    connect: false,
+    slider: 0,
 
   },
 
@@ -30,27 +31,32 @@ Page({
     var that = this;
     mac = options.mac
     name = options.name
-    console.log('loaded', mac, name)
+
+    console.log('loaded', mac, name, 'connect:', that.data.connect)
     wx.showLoading({
       title: '连接中',
       mask: !that.data.debug
     })
+
+
     wx.createBLEConnection({
       deviceId: mac,
-      timeout: 3000, 
+      timeout: 5000,
       success: function(res) {
         that.onConnectOK(res)
       },
       fail: function(res) {
         // that.onConnectNO(res)
-        console.log('第一次连接失败',res)
+        console.log('第一次连接失败', res)
         //第一次失败1秒后再次连接
-        setTimeout(function () {
+        setTimeout(function() {
           wx.createBLEConnection({
             deviceId: mac,
-            success: function (res) {
+            timeout: 10000,
+            success: function(res) {
               that.onConnectOK(res)
-            }, fail: function (res) {
+            },
+            fail: function(res) {
               that.onConnectNO(res)
             }
           })
@@ -61,45 +67,114 @@ Page({
   },
   /**
    * 蓝牙连接成功
-  */
-  onConnectOK: function(res){
+   */
+  onConnectOK: function(res) {
     var that = this;
     console.log('蓝牙连接成功', res)
-    wx.hideLoading()
-    wx.setNavigationBarTitle({
-      title: name + '(已连接)',
-    })
+
     // wx.setStorage({
     //   key: '',
     //   data: '',
     // })
-    wx.setStorageSync('name', name)
-    wx.setStorageSync('mac', mac)
-    wx.onBLEConnectionStateChange(function (res) {//蓝牙状态监听
-      console.log('连接状态', res.connected)
-      if (!res.connected) {
-        //蓝牙断开后回到首页
 
-        wx.redirectTo({
-          url: '../start/start?result=true',
-        })
-      }
-
-    })
     wx.getBLEDeviceServices({
       deviceId: mac,
       success: function(res) {
-        console.log('获取到severuuid',res)
+        console.log('获取到severuuid', res)
+        wx.hideLoading()
+        wx.setNavigationBarTitle({
+          title: name + '(已连接)',
+        })
+        wx.setStorageSync('name', name)
+        wx.setStorageSync('mac', mac)
+        wx.onBLEConnectionStateChange(function(res) { //蓝牙状态监听
+          console.log('连接状态', res.connected, "connect:", that.data.connect)
+          if (!res.connected && that.data.connect) {
+            //蓝牙断开后回到首页
+            console.log('监听跳转')
+            wx.reLaunch({
+              url: '../start/start?result=true',
+            })
+          }
+        })
         wx.getBLEDeviceCharacteristics({
           deviceId: mac,
           serviceId: that.data.UUID_SERVER,
-          success: function (res) {
+          success: function(res) {
             console.log('特征码', res)
-          },
+          }
         })
       },
+      fail: function(res) {
+        console.log('serverid获取失败', res);
+        wx.closeBluetoothAdapter({
+          success: function(res) {
+            console.log('适配器重启');
+            wx.openBluetoothAdapter({
+              success: function(res) {
+                console.log('重启后重连')
+                wx.createBLEConnection({
+                  deviceId: mac,
+                  timeout: 1000,
+                  success: function(res) {
+                    console.log('重连成功')
+                    that.onConnectOK(res);
+                  },
+                  fail: function(res) {
+                    console.log('第一次重接失败', res)
+                    //第一次失败2秒后再次连接
+                    setTimeout(function() {
+                      wx.createBLEConnection({
+                        deviceId: mac,
+                        timeout: 5000,
+                        success: function(res) {
+                          that.onConnectOK(res)
+                        },
+                        fail: function(res) {
+                          that.onConnectNO(res)
+                        }
+                      })
+                    }, 2000)
+                  }
+                })
+              },
+            })
+          },
+        })
+        // wx.closeBLEConnection({
+        //   deviceId: mac,
+        //   success: function(res) {
+        //     console.log('断开连接重连')
+        //     wx.createBLEConnection({
+        //       deviceId: mac,
+        //       timeout: 5000,
+        //       success: function(res) {
+        //         console.log('重连成功')
+        //         that.onConnectOK(res);
+        //       },
+        //       fail: function(res) {
+        //         console.log('第一次重接失败', res)
+        //         //第一次失败2秒后再次连接
+        //         setTimeout(function() {
+        //           wx.createBLEConnection({
+        //             deviceId: mac,
+        //             timeout: 10000,
+        //             success: function(res) {
+        //               that.onConnectOK(res)
+        //             },
+        //             fail: function(res) {
+        //               that.onConnectNO(res)
+        //             }
+        //           })
+        //         }, 2000)
+        //       }
+        //     })
+        //   },
+        // })
+
+      }
     })
-    
+
     wx.notifyBLECharacteristicValueChange({
       deviceId: mac,
       serviceId: that.data.UUID_SERVER,
@@ -114,8 +189,8 @@ Page({
         sound[2] = 124;
         that.wirte(sound)
 
-        wx.onBLECharacteristicValueChange(function(res){
-          console.log('收到消息:',res);
+        wx.onBLECharacteristicValueChange(function(res) {
+          console.log('收到消息:', res);
           var v = res.value;
           var array = new Int8Array(v);
           that.setData({
@@ -127,8 +202,8 @@ Page({
     })
   },
   /**蓝牙连接失败*/
-  onConnectNO: function(res){
-   var that = this
+  onConnectNO: function(res) {
+    var that = this
     console.log('蓝牙连接失败', res)
     wx.showToast({
       title: '连接失败请重试',
@@ -139,8 +214,9 @@ Page({
 
     })
     if (!that.data.debug) {
-      setTimeout(function () {
-        wx.redirectTo({
+      setTimeout(function() {
+        console.log('链接失败跳转')
+        wx.reLaunch({
           url: '../start/start?result=true',
         })
       }, 2000)
@@ -211,27 +287,27 @@ Page({
   // },
   /**
    * 长按
-  */
-  onLongClick:function(res){
+   */
+  onLongClick: function(res) {
     var that = this
     console.log('长按')
     that.setData({
-      longClick:true
+      longClick: true
     })
     const down = new Int8Array(3);
     down[0] = 121;
     down[1] = -121;
     down[2] = 126;
-      wx.vibrateShort({})
+    wx.vibrateShort({})
     that.wirte(down)
-    setTimeout(function(){
+    setTimeout(function() {
       const up = new Int8Array(3);
       up[0] = 121;
       up[1] = -121;
       up[2] = 127;
       wx.vibrateShort({})
       that.wirte(up)
-    },800)
+    }, 800)
 
   },
 
@@ -339,23 +415,29 @@ Page({
       case 'zhuxiao':
         wx.vibrateShort({})
         wx.clearStorageSync()
+        that.setData({
+          connect: false
+        })
         wx.closeBLEConnection({
           deviceId: mac,
-          success: function (res) {
+          success: function(res) {
             console.log('断开链接')
           },
-          complete: function (res) {
-            console.log('跳转到链接页面')
-            wx.redirectTo({
+          complete: function(res) {
+            console.log('点击跳转到链接页面')
+            wx.reLaunch({
+              url: '..kongzhi/start',
+            })
+            wx.reLaunch({
               url: '../start/start',
             })
           }
         })
-      break;
+        break;
     }
 
   },
-  button: function (e) {
+  button: function(e) {
     var buttonType = e.currentTarget.dataset.type
     console.log(buttonType)
     switch (buttonType) {
@@ -384,7 +466,7 @@ Page({
         up[1] = -121;
         up[2] = 19;
         this.wirte(up)
-        wx.vibrateShort({})     
+        wx.vibrateShort({})
         break
       case 'volDes':
         console.log('down')
@@ -393,7 +475,7 @@ Page({
         down[1] = -121;
         down[2] = 20;
         this.wirte(down)
-        wx.vibrateShort({})      
+        wx.vibrateShort({})
         break
       default:
         console.log('enter')
@@ -465,7 +547,7 @@ Page({
     if (this.data.show_lun) {
       start[0] = 122;
       start[1] = -122;
-      
+
     } else {
       start[0] = -122;
       start[1] = 122;
@@ -482,9 +564,9 @@ Page({
   onTouchEnd: function(res) {
     var that = this;
     console.log('end', res)
-    if(that.data.longClick){
+    if (that.data.longClick) {
       that.setData({
-        longClick:false
+        longClick: false
       })
       return;
     }
@@ -506,12 +588,13 @@ Page({
         that.wirte(up)
         wx.vibrateShort({})
         that.setData({
-          show_lun:true
+          show_lun: true
         })
       }, 200)
     }
 
-  }, changeSlider :function(res){
+  },
+  changeSlider: function(res) {
     this.setData({
       slider: res.detail.value
     })
@@ -519,7 +602,7 @@ Page({
   /**
    * 音量改变
    */
-  change:function(res){
+  change: function(res) {
     this.setData({
       slider: res.detail.value
     })
