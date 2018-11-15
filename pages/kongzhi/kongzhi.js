@@ -328,10 +328,12 @@ Page({
     switch (event.currentTarget.id) {
       case 'top1':
         console.log('top1')
-        const close = new Int8Array(3);
-        close[0] = 121;
-        close[1] = -121;
-        close[2] = 26;
+        const close = new Int8Array(5);
+        close[0] = 101;
+        close[1] = -1;
+        close[2] = 0;
+        close[3] = 0;
+        close[4] = 100;
         this.wirte(close)
         wx.vibrateShort({})
 
@@ -440,6 +442,29 @@ Page({
           }
         })
         break;
+      case 'ceiling_up':
+        console.log('ceiling_up')
+        const ceiling_up = new Int8Array(5);
+        ceiling_up[0] = 97;
+        ceiling_up[1] = -1;
+        ceiling_up[2] = 0;
+        ceiling_up[3] = 0;
+        ceiling_up[4] = 96;
+        this.wirte(ceiling_up)
+        wx.vibrateShort({})
+      break;
+
+      case 'ceiling_down':
+        console.log('ceiling_down')
+        const ceiling_down = new Int8Array(5);
+        ceiling_down[0] = 96;
+        ceiling_down[1] = -1;
+        ceiling_down[2] = 0;
+        ceiling_down[3] = 0;
+        ceiling_down[4] = 95;
+        this.wirte(ceiling_down)
+        wx.vibrateShort({})
+      break;
     }
 
   },

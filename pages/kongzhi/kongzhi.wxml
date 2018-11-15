@@ -2,7 +2,7 @@
 <view id='top-view' style='margin-top:10%'>
   <view class='top-4' id='top1' bindtap='onClickUp' hover-class='ui-share-hover'>
     <icon class='iconfont icon-close'></icon>
-    <view style='font-size:80%'>关屏</view>
+    <view style='font-size:80%'>电源</view>
   </view>
   <view class='top-4' id='top2' bindtap='onClickUp' hover-class='ui-share-hover'>
     <icon class='iconfont icon-home'></icon>
@@ -79,7 +79,14 @@
       </view>
     </view>
   </view>
+  <view style='margin-left:40rpx;margin-right:40rpx;'>
+    <button class='backfont:icon-ceiling_up' style='float: left;' bindtap='onClickUp' id='ceiling_up'></button>
+    <button class='backfont:icon-ceiling_down' style='float: right;' bindtap='onClickUp' id='ceiling_down'></button>
+  </view>
 </view>
+
+
+
 <view>
   <canvas class='daohang-view' hidden='{{!show}}' style='background-color:#ECECEC; position: relative;display: flex; box-sizing: border-box;' canvas-id="firstCanvas" disable-scroll="true" bindtouchstart="onTouchStart" bindtouchmove="onTouch" bindtouchend="onTouchEnd"
     bindtouchcancel="onTouchEnd" bindlongtap='onLongClick'>

@@ -1,11 +1,11 @@
 /**app.wxss**/
 @font-face {
   font-family: 'iconfont';  /* project id 838752 */
-  src: url('//at.alicdn.com/t/font_838752_xkti659l3v.eot');
-  src: url('//at.alicdn.com/t/font_838752_xkti659l3v.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_838752_xkti659l3v.woff') format('woff'),
-  url('//at.alicdn.com/t/font_838752_xkti659l3v.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_838752_xkti659l3v.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_838752_di09gktcluh.eot');
+  src: url('//at.alicdn.com/t/font_838752_di09gktcluh.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_838752_di09gktcluh.woff') format('woff'),
+  url('//at.alicdn.com/t/font_838752_di09gktcluh.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_838752_di09gktcluh.svg#iconfont') format('svg');
 }
 .container {
   height: 100%;
@@ -66,4 +66,6 @@
 .icon-gunlun:before{content: "\e697"}
 .icon-zhuxiao:before{content: "\e63a"}
 .icon-colour:before{content:"\e608"}
+.icon-ceiling_up:before{content:"\e64e"}
+.icon-ceiling_down:before{content:"\e725"}
 /*《最后的译者》《沉默的音节》​​*/
