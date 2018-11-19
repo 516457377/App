@@ -3,6 +3,7 @@ var num;
 var app = getApp()
 var result = false;
 var autoName = 'Nodivice';
+var jump = false;
 Page({
 
   /**
@@ -28,6 +29,8 @@ Page({
   onLoad: function(options) {
     console.log(this.route, 'onLoad');
     that = this;
+    jump = false;
+    autoName = 'Nodivice';
     //检查设备型号
     wx.getSystemInfo({
       success: function(res) {
@@ -106,8 +109,9 @@ Page({
     })
     console.log(this.route, 'onShow', 'BLE has:', this.data.openBle, 'name:', this.data.name, '_result:', result)
     var that = this;
-    if (that.data.name != null && that.data.mac != '' && !result && this.data.openBle) {
+    if (that.data.name != null && that.data.mac != '' && !result && this.data.openBle && !jump) {
       //存在数据直接连接
+      jump = true;
       wx.redirectTo({
         url: '../kongzhi/kongzhi?mac=' + that.data.mac + '&name=' + that.data.name,
         complete: function() {
@@ -116,7 +120,7 @@ Page({
         }
       })
     }
-    if (that.data.name != null && that.data.mac != '' && !result) {
+    if (that.data.name != null && that.data.mac != null && result) {
       autoName = that.data.name;
     }
 
@@ -130,8 +134,9 @@ Page({
             openBle: true
           })
           wx.startPullDownRefresh({})
-          if (that.data.name != null && that.data.mac != '' && !result && that.data.openBle) {
+          if (that.data.name != null && that.data.mac != '' && !result && that.data.openBle && !jump) {
             //存在数据直接连接
+            jump = true;
             wx.redirectTo({
               url: '../kongzhi/kongzhi?mac=' + that.data.mac + '&name=' + that.data.name,
               complete: function() {
@@ -233,7 +238,7 @@ Page({
                   } else {
                     var remeber = -1;
                     for (var i = 0; i < that.data.mList.length; i++) {
-                      if (autoName == that.data.mList[i].name) {
+                      if (autoName == that.data.mList[i].name && !jump) {
                         console.log('找到了相符的:', autoName, i);
                         remeber = i;
                         wx.showModal({
@@ -243,6 +248,7 @@ Page({
                           success(res) {
                             if (res.confirm) {
                               console.log('点击确认重连', remeber);
+                              jump = true;
                               wx.redirectTo({
                                 url: '../kongzhi/kongzhi?mac=' + that.data.mList[remeber].mac + '&name=' + that.data.mList[remeber].name,
                                 complete: function() {
@@ -322,9 +328,10 @@ Page({
   /**item 点击*/
   onItemClick: function(res) {
     console.log('itemclick', res.currentTarget.dataset.mac, res.currentTarget.dataset.name);
-    if (res.currentTarget.dataset.mac == '' && !this.data.debug) {
+    if (res.currentTarget.dataset.mac == '' && !this.data.debug && !jump) {
       return
     }
+    jump = true;
     wx.redirectTo({
       url: '../kongzhi/kongzhi?mac=' + res.currentTarget.dataset.mac + '&name=' + res.currentTarget.dataset.name,
       complete: function() {
@@ -412,13 +419,17 @@ Page({
         for (var i = 0; i < res.devices.length; i++) {
 
           if (res.devices[i].name.indexOf(name) > -1 || res.devices[i].localName.indexOf(name) > -1) {
-            wx.redirectTo({
-              url: '../kongzhi/kongzhi?mac=' + res.devices[i].deviceId + '&name=' + res.devices[i].localName,
-              complete: function() {
-                console.log('start结束')
-                return;
-              }
-            })
+            if (!jump) {
+              jump = true;
+              wx.redirectTo({
+                url: '../kongzhi/kongzhi?mac=' + res.devices[i].deviceId + '&name=' + res.devices[i].localName,
+                complete: function() {
+                  console.log('start结束')
+                  return;
+                }
+              })
+            }
+
           }
         }
         console.log("没有找到合适的连接设备");
