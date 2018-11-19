@@ -2,6 +2,7 @@
 var num;
 var app = getApp()
 var result = false;
+var autoName = 'Nodivice';
 Page({
 
   /**
@@ -31,7 +32,7 @@ Page({
     wx.getSystemInfo({
       success: function(res) {
         console.log('info', res)
-        console.log('版本',app.getVersion())
+        console.log('版本', app.getVersion())
         // if (res.system.indexOf('ios') || res.system.indexOf('iOS') || res.system.indexOf('Ios')) {
         //   that.setData({
         //     ios: true
@@ -45,9 +46,9 @@ Page({
         title: '提示',
         content: '当前微信版本过低，请更新至最新版本',
         showCancel: false,
-        success:function(res){
-          if (res.confirm){//确认
-            
+        success: function(res) {
+          if (res.confirm) { //确认
+
           }
         }
       })
@@ -90,8 +91,7 @@ Page({
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function() {
-  },
+  onReady: function() {},
 
 
   /**
@@ -99,14 +99,14 @@ Page({
    * 每次进入会调用
    */
   onShow: function() {
-    
+
     this.setData({
       name: wx.getStorageSync('name'),
       mac: wx.getStorageSync('mac')
     })
     console.log(this.route, 'onShow', 'BLE has:', this.data.openBle, 'name:', this.data.name, '_result:', result)
     var that = this;
-    if (that.data.name != null && that.data.name != '' && !result) {
+    if (that.data.name != null && that.data.mac != '' && !result && this.data.openBle) {
       //存在数据直接连接
       wx.redirectTo({
         url: '../kongzhi/kongzhi?mac=' + that.data.mac + '&name=' + that.data.name,
@@ -115,6 +115,9 @@ Page({
           wx.stopPullDownRefresh();
         }
       })
+    }
+    if (that.data.name != null && that.data.mac != '' && !result) {
+      autoName = that.data.name;
     }
 
     if (that.data.openBle) {
@@ -127,6 +130,16 @@ Page({
             openBle: true
           })
           wx.startPullDownRefresh({})
+          if (that.data.name != null && that.data.mac != '' && !result && that.data.openBle) {
+            //存在数据直接连接
+            wx.redirectTo({
+              url: '../kongzhi/kongzhi?mac=' + that.data.mac + '&name=' + that.data.name,
+              complete: function() {
+                console.log('start结束')
+                wx.stopPullDownRefresh();
+              }
+            })
+          }
         }
       })
     }
@@ -143,19 +156,18 @@ Page({
     })
 
     wx.closeBluetoothAdapter({
-      success: function(res) {
-      },
+      success: function(res) {},
     })
     wx.openBluetoothAdapter({
-      success: function (res) {
+      success: function(res) {
         console.log("重启设备");
         wx.hideLoading()
         wx.startBluetoothDevicesDiscovery({
           allowDuplicatesKey: false,
-          success: function (res) {
+          success: function(res) {
             console.log('打开扫描开始:', res)
 
-            wx.onBluetoothDeviceFound(function (res) {
+            wx.onBluetoothDeviceFound(function(res) {
               console.log('发现设备', res)
               // var ds = that.data.mList
               // var temp = {
@@ -168,20 +180,18 @@ Page({
               // })
             })
           },
-          fail: function (res) {
+          fail: function(res) {
             console.log('打开扫描设备失败', res)
           }
         })
         //3秒后关闭扫描
         clearTimeout(num) //只需要一个定时器存在
-        num = setTimeout(function () {
+        num = setTimeout(function() {
           wx.stopBluetoothDevicesDiscovery({
-            success: function (res) {
-              console.log('关闭扫描')
-              wx.stopPullDownRefresh(); //停止当前页面的下拉刷新
-              wx.hideNavigationBarLoading(); //加载动画结束
+            success: function(res) {
+
               wx.getBluetoothDevices({
-                success: function (res) {
+                success: function(res) {
                   console.log('所有设备', res)
                   for (var i = 0; i < res.devices.length; i++) {
                     var ds = that.data.mList
@@ -199,7 +209,7 @@ Page({
                     })
                   }
                 },
-                fail: function (res) {
+                fail: function(res) {
                   that.setData({
                     mList: [{
                       name: '未搜索到设备，请刷新',
@@ -207,15 +217,48 @@ Page({
                     }]
                   })
                 },
-                complete: function (res) {
-                  console.log('length:', that.data.mList)
-                  if (that.data.mList.length <= 0) {
+                complete: function(res) {
+                  console.log('关闭扫描')
+                  wx.stopPullDownRefresh(); //停止当前页面的下拉刷新
+                  wx.hideNavigationBarLoading(); //加载动画结束
+                  console.log('扫描结果：length:', that.data.mList, '可能连接名：', autoName)
+                  if (that.data.mList.length <= 1) {
+                    console.log('没有扫描到')
                     that.setData({
                       mList: [{
                         name: '未搜索到设备，请刷新',
                         mac: ''
                       }]
                     })
+                  } else {
+                    var remeber = -1;
+                    for (var i = 0; i < that.data.mList.length; i++) {
+                      if (autoName == that.data.mList[i].name) {
+                        console.log('找到了相符的:', autoName, i);
+                        remeber = i;
+                        wx.showModal({
+                          title: '发现可重连设备',
+                          content: '是否重连',
+                          showCancel: true,
+                          success(res) {
+                            if (res.confirm) {
+                              console.log('点击确认重连', remeber);
+                              wx.redirectTo({
+                                url: '../kongzhi/kongzhi?mac=' + that.data.mList[remeber].mac + '&name=' + that.data.mList[remeber].name,
+                                complete: function() {
+
+                                  return;
+                                }
+                              })
+
+                            } else {
+                              console.log('取消重连');
+                              autoName = 'Nodivice';
+                            }
+                          }
+                        })
+                      }
+                    }
                   }
 
                 }
@@ -226,7 +269,7 @@ Page({
       },
     })
 
-    
+
     // clearTimeout(num)
 
   },

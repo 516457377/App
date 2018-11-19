@@ -20,7 +20,7 @@ Page({
     debug: false,
     longClick: false,
     connect: false,
-    NumOut:false,
+    NumOut: false,
     slider: 0,
 
   },
@@ -82,6 +82,9 @@ Page({
       deviceId: mac,
       success: function(res) {
         console.log('获取到severuuid', res)
+        that.setData({
+          connect: true
+        })
         wx.hideLoading()
         wx.setNavigationBarTitle({
           title: name + '(已连接)',
@@ -108,12 +111,12 @@ Page({
       },
       fail: function(res) {
         console.log('serverid获取失败', res);
-        if(that.data.NumOut){
+        if (that.data.NumOut) {
           that.onConnectNO(res)
           return;
         }
         that.setData({
-          NumOut:true
+          NumOut: true
         })
         wx.closeBluetoothAdapter({
           success: function(res) {
@@ -452,7 +455,7 @@ Page({
         ceiling_up[4] = 96;
         this.wirte(ceiling_up)
         wx.vibrateShort({})
-      break;
+        break;
 
       case 'ceiling_down':
         console.log('ceiling_down')
@@ -464,7 +467,7 @@ Page({
         ceiling_down[4] = 95;
         this.wirte(ceiling_down)
         wx.vibrateShort({})
-      break;
+        break;
     }
 
   },
@@ -645,12 +648,13 @@ Page({
     this.wirte(sound)
     wx.vibrateShort({})
   },
-  disConnect: function () {
+  disConnect: function() {
     wx.createBLEConnection({
       deviceId: '00:00:00:00:00',
-      success: function (res) {
+      success: function(res) {
         console.log("这也能连接成功？");
-      }, fail: function (res) {
+      },
+      fail: function(res) {
         console.log("尝试连接失败");
       }
     })
