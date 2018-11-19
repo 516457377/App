@@ -33,12 +33,12 @@ Page({
     mac = options.mac
     name = options.name
 
-    console.log('loaded', mac, name, 'connect:', that.data.connect)
+    console.log('kongzhi', mac, name, 'connect:', that.data.connect);
+
     wx.showLoading({
       title: '连接中',
-      mask: !that.data.debug
-    })
-
+      mask: !that.data.debug,
+    });
 
     wx.createBLEConnection({
       deviceId: mac,
@@ -85,10 +85,11 @@ Page({
         that.setData({
           connect: true
         })
-        wx.hideLoading()
+        
         wx.setNavigationBarTitle({
           title: name + '(已连接)',
         })
+        wx.hideLoading()
         wx.setStorageSync('name', name)
         wx.setStorageSync('mac', mac)
         wx.onBLEConnectionStateChange(function(res) { //蓝牙状态监听
