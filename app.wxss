@@ -1,11 +1,11 @@
 /**app.wxss**/
 @font-face {
   font-family: 'iconfont';  /* project id 838752 */
-  src: url('//at.alicdn.com/t/font_838752_di09gktcluh.eot');
-  src: url('//at.alicdn.com/t/font_838752_di09gktcluh.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_838752_di09gktcluh.woff') format('woff'),
-  url('//at.alicdn.com/t/font_838752_di09gktcluh.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_838752_di09gktcluh.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_838752_0pjq1tpz35c.eot');
+  src: url('//at.alicdn.com/t/font_838752_0pjq1tpz35c.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_838752_0pjq1tpz35c.woff') format('woff'),
+  url('//at.alicdn.com/t/font_838752_0pjq1tpz35c.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_838752_0pjq1tpz35c.svg#iconfont') format('svg');
 }
 .container {
   height: 100%;
@@ -63,7 +63,7 @@
 .icon-enter:before{content: "\e723"}
 .icon-back:before{content: "\e603"}
 .icon-yaokong:before{content: "\e622"}
-.icon-gunlun:before{content: "\e697"}
+.icon-gunlun:before{content: "\e67b"}
 .icon-zhuxiao:before{content: "\e63a"}
 .icon-colour:before{content:"\e608"}
 .icon-ceiling_up:before{content:"\e64e"}

@@ -20,7 +20,6 @@ Page({
     name: '',
     mac: '',
     // ios: false
-
   },
 
   /**
