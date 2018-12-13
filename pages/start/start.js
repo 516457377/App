@@ -33,8 +33,7 @@ Page({
     //检查设备型号
     wx.getSystemInfo({
       success: function(res) {
-        console.log('info', res)
-        console.log('版本', app.getVersion())
+        console.log('info', res, '版本', app.getVersion())
         // if (res.system.indexOf('ios') || res.system.indexOf('iOS') || res.system.indexOf('Ios')) {
         //   that.setData({
         //     ios: true
@@ -68,7 +67,7 @@ Page({
       result = true;
     }
     var that = this;
-    wx.openBluetoothAdapter({
+    wx.openBluetoothAdapter({ //初始化蓝牙模块
       success: function(res) {
         console.log('蓝牙初始化成功')
         that.setData({
@@ -106,15 +105,20 @@ Page({
       name: wx.getStorageSync('name'),
       mac: wx.getStorageSync('mac')
     })
+
     var that = this;
+    if (jump){
+      return;
+    }
+    //延迟0.5秒触发，有可能初始化蓝牙有延迟。
     setTimeout(function() {
       console.log(this.route, 'onShow', 'BLE has:', that.data.openBle, 'name:', that.data.name, '_result:', result)
-      
+
       if (that.data.name != null && that.data.mac != '' && !result && that.data.openBle && !jump) {
-        //存在数据直接连接
+        //存在数据直接连接  
         jump = true;
         wx.hideLoading();
-        wx.redirectTo({
+        wx.redirectTo({ 
           url: '../kongzhi/kongzhi?mac=' + that.data.mac + '&name=' + that.data.name,
           complete: function() {
             console.log('start结束')
@@ -136,7 +140,7 @@ Page({
             that.setData({
               openBle: true
             })
-            
+
             if (that.data.name != null && that.data.mac != '' && !result && that.data.openBle && !jump) {
               //存在数据直接连接
               jump = true;
@@ -148,7 +152,7 @@ Page({
                   wx.stopPullDownRefresh();
                 }
               })
-            }else{
+            } else {
               wx.startPullDownRefresh({})
             }
           }
@@ -331,9 +335,9 @@ Page({
   /**
    * 刷新
    */
-  onRefresh: function() {
-    wx.startPullDownRefresh({})
-  },
+  // onRefresh: function() {
+  //   wx.startPullDownRefresh({})
+  // },
   /**item 点击*/
   onItemClick: function(res) {
     console.log('itemclick', res.currentTarget.dataset.mac, res.currentTarget.dataset.name);
@@ -364,7 +368,7 @@ Page({
         // name = url.substring(url.indexOf('&') + 1, url.lastIndexOf('&'))
         // mac = url.substring(url.lastIndexOf('&') + 1, url.length)
 
-        if (url.indexOf('##') != -1) { //识别码双#
+        if (url.indexOf('##') != -1) { //识别码 双#
           name = url.substring(url.indexOf('##') + 2);
           that.connectForName(name)
         } else {
@@ -431,11 +435,13 @@ Page({
           if (res.devices[i].name.indexOf(name) > -1 || res.devices[i].localName.indexOf(name) > -1) {
             if (!jump) {
               jump = true;
+              
               wx.hideLoading();
               wx.redirectTo({
                 url: '../kongzhi/kongzhi?mac=' + res.devices[i].deviceId + '&name=' + res.devices[i].localName,
                 complete: function() {
                   console.log('start结束')
+                  wx.stopPullDownRefresh();
                   return;
                 }
               })
