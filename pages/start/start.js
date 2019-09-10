@@ -16,7 +16,7 @@ Page({
     }],
     openBle: false,
     UUID_SERVER: '0000fee0-0000-1000-8000-00805f9b34fb',
-    debug: true,
+    debug: false,
     name: '',
     mac: '',
     // ios: false
@@ -335,9 +335,9 @@ Page({
   /**
    * 刷新
    */
-  // onRefresh: function() {
-  //   wx.startPullDownRefresh({})
-  // },
+  onRefresh: function() {
+    wx.startPullDownRefresh({})
+  },
   /**item 点击*/
   onItemClick: function(res) {
     console.log('itemclick', res.currentTarget.dataset.mac, res.currentTarget.dataset.name);
