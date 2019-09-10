@@ -1,6 +1,5 @@
 {
   "pages": [
-    
     "pages/start/start",
     "pages/index/index",
     "pages/kongzhi/kongzhi",
@@ -12,5 +11,6 @@
     "navigationBarTitleText": "智能吸顶",
     "navigationBarTextStyle": "black",
     "backgroundColor": "#eeeeee"
-  }
+  },
+  "sitemapLocation": "sitemap.json"
 }

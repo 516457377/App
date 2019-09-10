@@ -39,7 +39,7 @@
 </view>
 
 
-<view class='daohang-view' hidden='{{show}}'>
+<view class='daohang-view' hidden="{{show}}">
   <!-- <view class='grid-3'></view>
   <view class='grid-3' style='margin-bottom:50rpx' id='up' bindtap='onClickUp' hover-class='ui-share-hover'>
     <icon class='iconfont icon-up' />
@@ -87,8 +87,8 @@
 
 
 
-<view>
-  <canvas class='daohang-view' hidden='{{!show}}' style='background-color:#ECECEC; position: relative;display: flex; box-sizing: border-box;' canvas-id="firstCanvas" disable-scroll="true" bindtouchstart="onTouchStart" bindtouchmove="onTouch" bindtouchend="onTouchEnd"
+<view  hidden="{{!show}}">
+  <canvas class='daohang-view'  style='background-color:#ECECEC; position: relative;display: flex; box-sizing: border-box;' canvas-id="firstCanvas" disable-scroll="true" bindtouchstart="onTouchStart" bindtouchmove="onTouch" bindtouchend="onTouchEnd"
     bindtouchcancel="onTouchEnd" bindlongtap='onLongClick'>
     <icon class='iconfont icon-gunlun' hidden='{{show_lun}}' style='padding-top:28%;padding-left:35%;font-size:220rpx;'></icon>
   </canvas>
