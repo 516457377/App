@@ -79,7 +79,7 @@
       </view>
     </view>
   </view>
-  <view style='margin-left:40rpx;margin-right:40rpx;'>
+  <view hidden="{{hindUp_Down}}" style='margin-left:40rpx;margin-right:40rpx;'>
     <button class='backfont:icon-ceiling_up' style='float: left;' bindtap='onClickUp' id='ceiling_up'></button>
     <button class='backfont:icon-ceiling_down' style='float: right;' bindtap='onClickUp' id='ceiling_down'></button>
   </view>

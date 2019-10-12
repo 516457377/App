@@ -16,7 +16,7 @@ Page({
     }],
     openBle: false,
     UUID_SERVER: '0000fee0-0000-1000-8000-00805f9b34fb',
-    debug: false,
+    debug: __wxConfig.envVersion == "develop" ? true : false,
     name: '',
     mac: '',
     // ios: false

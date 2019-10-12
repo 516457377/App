@@ -17,11 +17,12 @@ Page({
     mDevice: null,
     show: false,
     show_lun: true,
-    debug: false,
+    debug: __wxConfig.envVersion == "develop" ? true : false,
     longClick: false,
     connect: false,
     NumOut: false,
-    slider: 0,
+    slider: 0,//记录音量
+    hindUp_Down:false,//是否隐藏上下箭头
 
   },
 
